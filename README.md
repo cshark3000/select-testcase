@@ -6,8 +6,8 @@
 
 ## Features
  - [ ] Nested lists
- + [ ] Search
- + [ ] Single/Multiple selection
+ - [x] Search
+ - [x] Single/Multiple selection
 
 ## Stack
 * Typescript
