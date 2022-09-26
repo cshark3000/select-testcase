@@ -17,7 +17,7 @@ import {
 const Select = (props: SelectProps) => {
     const { options, placeholder, multiple, searchable, onChange } = props;
     const [isOpen, setIsOpen] = useState<boolean>(false);
-    const [selectedValue, setSelectedValue] = useState<SelectOption>((multiple ? [] : '') as SelectOption);
+    const [selectedValue, setSelectedValue] = useState(multiple ? [] : '');
     const [searchValue, setSearchValue] = useState('');
 
     const searchRef = useRef<HTMLInputElement>(null);
@@ -37,7 +37,7 @@ const Select = (props: SelectProps) => {
         };
     });
 
-    const handleInputClick = (e: any) => {
+    const handleInputClick = (e: React.MouseEvent) => {
         e.stopPropagation();
         setIsOpen(!isOpen);
     };
@@ -57,17 +57,18 @@ const Select = (props: SelectProps) => {
         onChange(newValue);
     }
 
-    const isSelected = (option: any) => {
-        if (multiple && Array.isArray(selectedValue)) {
-            return selectedValue.filter((o: any) => o.value === option.value).length > 0;
-        }
+    const isSelected = (option: Option) => {
         if (!selectedValue) {
             return false;
+        }
+
+        if (multiple && Array.isArray(selectedValue)) {
+            return selectedValue.filter((o: Option) => o.value === option.value).length > 0;
         }
         return selectedValue.value === option.value;
     }
 
-    const onSearch = (e: any) => {
+    const onSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
         setSearchValue(e.target.value);
     };
 
@@ -85,7 +86,7 @@ const Select = (props: SelectProps) => {
         if (multiple) {
             return (
                 <SelectOptionTagsStyled>
-                    {selectedValue.map((option: any) => (
+                    {selectedValue.map((option: Option) => (
                         <SelectOptionTagStyled key={option.value}>
                             {option.label}
                             <SelectOptionTagClose onClick={(e) => onTagRemove(e, option)}><CloseIcon /></SelectOptionTagClose>
@@ -97,11 +98,11 @@ const Select = (props: SelectProps) => {
         return selectedValue.label;
     };
 
-    const removeOption = (option: any) => {
-        return selectedValue.filter((o: any) => o.value !== option.value);
+    const removeOption = (option: Option) => {
+        return selectedValue.filter((o: Option) => o.value !== option.value);
     };
 
-    const onTagRemove = (e: any, option: any) => {
+    const onTagRemove = (e: React.MouseEvent, option: Option) => {
         const newValue = removeOption(option);
         setSelectedValue(newValue);
         onChange(newValue);
